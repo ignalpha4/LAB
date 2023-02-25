@@ -2,6 +2,8 @@
 
 using namespace std;
 
+// imp : fill row wise and read colum wise
+
 
 string removeSpaces(string str)
 {
@@ -106,4 +108,4 @@ int main()
     cout << "Decrypted message: " << decrypted << endl;
 
     return 0;
-}
+} 

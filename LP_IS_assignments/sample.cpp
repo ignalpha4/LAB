@@ -41,25 +41,8 @@ int xorFunc(string s,int n)
 int main()
 {
 	
-	string s;
-	cin>>s;
-	
-	int n=s.length();
-	
-
-	cout<<"-----------------output-----------"<<endl;
 	
 	
-	cout<<"-------------AND operation--------"<<endl;
-	
-	andFunc(s,n);
-	cout<<endl;
-
-	
-	
-	cout<<"-------------XOR operation----------"<<endl;;
-	
-	xorFunc(s,n);
 	
 }
 
