@@ -4,6 +4,8 @@ using namespace std;
 
 // imp : fill row wise and read colum wise
 
+//this is colum cipher approach 1] transposition->keyless-> type(2)column cipher    ---not in syllabus
+
 
 string removeSpaces(string str)
 {
@@ -91,19 +93,19 @@ int main()
     string message, ciphertext, decrypted;
     int num_cols;
 
-    // get the message to encrypt
+    
     cout << "Enter a message to encrypt: ";
     getline(cin, message);
     
-    // get the number of columns to use for encryption
-    cout << "Enter the number of columns to use for encryption: ";
+
+    cout << "Enter the number of columns : ";
     cin >> num_cols;
     
-    // encrypt the message using columnar transposition
+   
     ciphertext = encrypt(message, num_cols);
     cout << "Encrypted message: " << ciphertext << endl;
     
-    // decrypt the message using columnar transposition
+ 
     decrypted = decrypt(ciphertext, num_cols);
     cout << "Decrypted message: " << decrypted << endl;
 
