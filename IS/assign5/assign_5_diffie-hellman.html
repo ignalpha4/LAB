@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Diffie-Hellman algorithm</title>
+
+    //BigInteger library of js for arithmetic operations of unlimited size of integers
+   
+    <script src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js"></script> 
+</head>
+
+<body>
+    <h1>Diffie-Hellman algorithm</h1>
+    <p>Enter prime number p and  primitive root g:</p>
+    <form>
+        P = <input type="text" id="p">
+        G = <input type="text" id="g">
+        <br>
+        <p>Enter private key value of Aice</p>
+        A=<input type="text" id="a"><br><br>
+        <input type="button" value="Generate keys" onclick="generateKeys()">
+    </form>
+
+    <br>
+    <p>Public parameters:</p>
+    <p>P = <span id="p_pub"></span></p>
+    <p>G = <span id="g_pub"></span></p>
+
+    <p>Private key of BOB:</p>
+
+    <p>B= <span id="b"></span></p>
+
+    <p>Shared secret key:</p>
+    <p>S = <span id="S"></span></p>
+
+
+    <script>               //js receiver side code 
+        function isPrime(n) {
+            if (n <= 1) return false;
+            if (n <= 3) return true;
+            if (n % 2 == 0 || n % 3 == 0) return false;
+            for (let i = 5; i * i <= n; i += 6) {
+                if (n % i == 0 || n % (i + 2) == 0) return false;
+            }
+            return true;
+        }
+
+        function isPrimitiveRoot(g, p) {
+            let factors = [];
+            let phi = p - 1;
+            for (let i = 2; i * i <= phi; i++) {
+                if (phi % i == 0) {
+                    factors.push(i);
+                    while (phi % i == 0) {
+                        phi /= i;
+                    }
+                }
+            }
+            if (phi > 1) factors.push(phi);
+            for (let i = 0; i < factors.length; i++) {
+                if (Math.pow(g, (p - 1) / factors[i]) % p == 1) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function generateKeys() {
+            let p = parseInt(document.getElementById("p").value);
+            let g = parseInt(document.getElementById("g").value);
+            if (!isPrime(p)) {
+                alert("p is not a prime number");
+                return;
+            }
+            if (!isPrimitiveRoot(g, p)) {
+                alert("g is not a primitive root modulo p");
+                return;
+            }
+            document.getElementById("p_pub").innerHTML = p;
+            document.getElementById("g_pub").innerHTML = g;
+            let a = parseInt(document.getElementById("a").value);
+            let A = bigInt(g).modPow(a, p); // compute public key for Alice
+            let b = Math.floor(Math.random() * (p - 2)) + 1; // choose random secret key for Bob
+            let B = bigInt(g).modPow(b, p); // compute public key for Bob
+            let S1 = bigInt(B).modPow(a, p); // compute shared secret key for Alice
+            let S2 = bigInt(A).modPow(b, p); // compute shared secret key for Bob
+              if (S1.toString() === S2.toString()) { // check if both shared secret keys match
+                        document.getElementById("a").innerHTML = a;
+                        document.getElementById("b").innerHTML = b;
+                        document.getElementById("S").innerHTML = S1.toString();
+                    } else {
+                        alert("Error: shared secret keys do not match");
+                    }
+                }
+    </script>
+    </body>
+    </html>
