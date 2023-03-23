@@ -34,7 +34,7 @@ int public_key(int p, int q)
 {
     int fie = (p - 1) * (q - 1);
 
-    for (int i = 2; i < INT16_MAX; i++)
+    for (int i = 2; i <INT16_MAX; i++)
     {
         int e = i;
 

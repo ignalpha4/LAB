@@ -16,6 +16,7 @@ int andFunc(string s,int n)
 	{
 		cout<<tand[i];
 	}
+	cout<<endl;
 
 	return 0;
 }
@@ -35,13 +36,21 @@ int xorFunc(string s,int n)
 		cout<<txor[i];
 	}
 		
+	cout<<endl;
 		return 0;
 }
 
 int main()
 {
+	string s;
+	int n;
+	cout<<"Enter the string :";
+	cin>>s;
 	
-	cout<<(7/100)*100<<endl;
+	n=s.size();
+	andFunc(s,n);
+	xorFunc(s,n);
+	
 	
 }
 
