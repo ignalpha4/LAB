@@ -1,9 +1,25 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
-int gcd(int a, int b)
+long long modular_exponentiation(long long base, long long exponent, long long modulus)
 {
-    int temp;
+    long long result = 1;
+    while (exponent > 0)
+    {
+        if (exponent % 2 == 1)
+        {
+            result = (result * base) % modulus;
+        }
+        base = (base * base) % modulus;
+        exponent = exponent / 2;
+    }
+    return result;
+}
+
+long long gcd(long long a, long long b)
+{
+    long long temp;
     while (b != 0)
     {
         temp = b;
@@ -12,14 +28,14 @@ int gcd(int a, int b)
     }
     return a;
 }
-int checkprime(int n)
+long long checkprime(long long n)
 {
     if (n <= 1)
     {
         return false;
     }
 
-    for (int i = 2; i < n; i++)
+    for (long long i = 2; i <= sqrt(n); i++)
     {
         if (n % i == 0)
         {
@@ -30,13 +46,13 @@ int checkprime(int n)
     return true;
 }
 
-int public_key(int p, int q)
+long long public_key(long long p, long long q)
 {
-    int fie = (p - 1) * (q - 1);
+    long long fie = (p - 1) * (q - 1);
 
-    for (int i = 2; i <INT16_MAX; i++)
+    for (long long i = 2; i < fie; i++)
     {
-        int e = i;
+        long long e = i;
 
         if (e < fie && gcd(e, fie) == 1 && e != p && e != q)
         {
@@ -45,50 +61,50 @@ int public_key(int p, int q)
     }
 }
 
-int private_key(int e, int p, int q)
+long long private_key(long long e, long long p, long long q)
 {
-    int d;
-    int fie = (p - 1) * (q - 1);
+    long long d;
+    long long fie = (p - 1) * (q - 1);
 
-    for (int i = 1; i < INT16_MAX; i++)
+    for (long long i = 1; i < INT16_MAX; i++)
     {
 
         d = i;
-        int temp = (e * d) % fie;
-        if (temp == 1)
+        long long temp = (e * d) % fie;
+        if (temp == 1 && d < fie)
         {
             return d;
         }
     }
 }
 
-int encryption(int e, int n, int m)
+long long encryption(long long e, long long n, long long m)
 {
-    int c;
+    long long c;
 
-    int power = pow(m, e);
+    long long power = pow(m, e);
 
     c = power % n;
 
     return c;
 }
 
-int decryption(int d, int n, int c)
+long long decryption(long long d, long long n, long long c)
 {
-    return fmod(pow(c, d), n);
+    return modular_exponentiation(c, d, n);
 }
 
 int main()
 {
 
-    int p, q, n, e, m;
+    long long p, q, n, e, m;
 
-    int pk;
+    long long pk;
 
     cout << "Enter values of p and q:" << endl;
     cin >> p >> q;
 
-    cout << "Enter massage:" << endl;
+    cout << "Enter message:" << endl;
     cin >> m;
 
     if (checkprime(p) == 0 && checkprime(q) == 0)
@@ -103,16 +119,18 @@ int main()
 
         cout << "public key is :" << public_key(p, q) << "," << n << endl
              << endl;
-
+        cout << "e:" << e << endl;
         cout << "Private key is :" << private_key(e, p, q) << "," << n << endl
              << endl;
 
-        int d = private_key(e, p, q);
+        long long d = private_key(e, p, q);
+
+        cout << "d :" << d << endl;
 
         cout << "Encrpyted msg is:" << encryption(e, n, m) << endl
              << endl;
 
-        int c = encryption(e, n, m);
+        long long c = encryption(e, n, m);
 
         cout << "plaintext  msg is:" << decryption(d, n, c) << endl;
     }
