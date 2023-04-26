@@ -21,11 +21,13 @@ void selectionsort(int arr[], int n)
         }
 
         swap(arr[min_index], arr[i]);
-    }
 
-    for (int i = 0; i < n; i++)
-    {
-        cout << arr[i] << " ";
+        for (int i = 0; i < n; i++)
+        {
+            cout << arr[i] << " ";
+        }
+        cout << endl;
+        cout << "------------" << endl;
     }
 }
 
@@ -43,6 +45,9 @@ int main()
     {
         cin >> arr[i];
     }
+    cout << "----------" << endl;
+    cout << "----------" << endl;
+    cout << "----------" << endl;
 
     selectionsort(arr, n);
 
