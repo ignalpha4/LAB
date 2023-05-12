@@ -1,139 +1,174 @@
-#include <bits/stdc++.h>
-
+#include <iostream>
+#include <cmath>
+#include <limits.h>
 using namespace std;
-
-// define a struct to represent a node in the search tree
-struct Node
+// A* alogrithm to solve 8 puzzle problem
+// Global variable to keep track of number of moves taken
+int g = 0;
+void Print(int puzzle[])
 {
-    int x, y;     // coordinates of the node
-    int f, g, h;  // f, g, and h values of the node
-    Node *parent; // pointer to the parent node
-
-    Node(int x, int y, int f, int g, int h, Node *parent = nullptr)
+    for (int i = 0; i < 9; i++)
     {
-        this->x = x;
-        this->y = y;
-        this->f = f;
-        this->g = g;
-        this->h = h;
-        this->parent = parent;
+        if (i % 3 == 0)
+            cout << '\n';
+        if (puzzle[i] == -1)
+            cout << "_ ";
+        else
+            cout << puzzle[i] << " ";
     }
-
-    // define the comparison operator for the priority queue
-    bool operator<(const Node &other) const
-    {
-        return f > other.f;
-    }
-};
-
-// define a function to calculate the Manhattan distance between two points
-int manhattan_distance(int x1, int y1, int x2, int y2)
-{
-    return abs(x1 - x2) + abs(y1 - y2);
+    cout << "\n\n";
 }
-
-// define the A* search function
-vector<pair<int, int>> a_star_search(vector<vector<int>> &grid, int start_x, int start_y, int goal_x, int goal_y)
+void moveLeft(int start[], int position)
 {
-    // define the priority queue for the open set
-    priority_queue<Node> open;
-
-    // create the start node and add it to the open set
-    int h = manhattan_distance(start_x, start_y, goal_x, goal_y);
-    Node start_node(start_x, start_y, h, 0, h);
-    open.push(start_node);
-
-    // define a 1D array for tracking whether each node has been visited
-    vector<bool> visited(grid.size() * grid[0].size(), false);
-
-    // continue searching until the open set is empty
-    while (!open.empty())
+    swap(start[position], start[position - 1]);
+}
+void moveRight(int start[], int position)
+{
+    swap(start[position], start[position + 1]);
+}
+void moveUp(int start[], int position)
+{
+    swap(start[position], start[position - 3]);
+}
+void moveDown(int start[], int position)
+{
+    swap(start[position], start[position + 3]);
+}
+void Copy(int temp[], int real[])
+{
+    for (int i = 0; i < 9; i++)
+        temp[i] = real[i];
+}
+/*
+For every number find difference in position in goal state and inital state
+Difference in vertical + difference in horizontal i.e Manhattan Distance
+*/
+int heuristic(int start[], int goal[])
+{
+    int h = 0;
+    for (int i = 0; i < 9; i++)
     {
-        // get the node with the lowest f value from the open set
-        Node current_node = open.top();
-        open.pop();
-
-        // if the current node is the goal, return the path to it
-        if (current_node.x == goal_x && current_node.y == goal_y)
+        for (int j = 0; j < 9; j++)
         {
-            vector<pair<int, int>> path;
-            while (current_node.parent != nullptr)
+            if (start[i] == goal[j] && start[i] != -1)
             {
-                path.push_back({current_node.x, current_node.y});
-                current_node = *current_node.parent;
-            }
-            reverse(path.begin(), path.end());
-            return path;
-        }
-
-        // mark the current node as visited
-        visited[current_node.x * grid[0].size() + current_node.y] = true;
-
-        // loop over the neighbors of the current node
-        for (int dx = -1; dx <= 1; dx++)
-        {
-            for (int dy = -1; dy <= 1; dy++)
-            {
-                if (dx == 0 && dy == 0)
-                    continue; // skip the current node
-                int nx = current_node.x + dx;
-                int ny = current_node.y + dy;
-                if (nx < 0 || nx >= grid.size() || ny < 0 || ny >= grid[0].size() || grid[nx][ny] == 1 || visited[nx * grid[0].size() + ny])
-                {
-                    continue; // skip nodes that are out of bounds, obstacles, or already visited
-                }
-                int cost = dx == 0 || dy == 0 ? 1 : 2; // calculate the cost of moving to the neighbor
-
-                int g = current_node.g + cost; // update the cost of reaching the neighbor
-
-                int h = manhattan_distance(nx, ny, goal_x, goal_y); // calculate the heuristic cost to the goal
-
-                Node neighbor(nx, ny, g + h, g, h, &current_node); // create the neighbor node
-
-                open.push(neighbor); // add the neighbor to the open set
+                h += abs((j - i) / 3) + abs((j - i) % 3);
             }
         }
     }
-
-    // if the goal is not reachable, return an empty path
-    return vector<pair<int, int>>();
+    return h + g;
 }
-
-// define a helper function to print the path
-void print_path(const vector<pair<int, int>> &path)
+void moveTile(int start[], int goal[])
 {
-    if (path.empty())
+    int emptyAt = 0;
+    for (int i = 0; i < 9; i++)
     {
-        cout << "No path found." << endl;
+        if (start[i] == -1)
+        {
+            emptyAt = i;
+            break;
+        }
+    }
+    int t1[9], t2[9], t3[9], t4[9], f1 = INT_MAX, f2 = INT_MAX, f3 = INT_MAX, f4 = INT_MAX;
+    Copy(t1, start);
+    Copy(t2, start);
+    Copy(t3, start);
+    Copy(t4, start);
+    int row = emptyAt / 3;
+    int col = emptyAt % 3;
+    if (col - 1 >= 0)
+    {
+        moveLeft(t1, emptyAt);
+        f1 = heuristic(t1, goal);
+    }
+
+    if (col + 1 < 3)
+    {
+        moveRight(t2, emptyAt);
+        f2 = heuristic(t2, goal);
+    }
+    if (row + 1 < 3)
+    {
+        moveDown(t3, emptyAt);
+        f3 = heuristic(t3, goal);
+    }
+
+    if (row - 1 >= 0)
+    {
+        moveUp(t4, emptyAt);
+        f4 = heuristic(t4, goal);
+    }
+
+    // Find Least Heuristic State and Make the Move
+    if (f1 <= f2 && f1 <= f3 && f1 <= f4)
+    {
+        moveLeft(start, emptyAt);
+    }
+    else if (f2 <= f1 && f2 <= f3 && f2 <= f4)
+    {
+        moveRight(start, emptyAt);
+    }
+    else if (f3 <= f1 && f3 <= f2 && f3 <= f4)
+    {
+        moveDown(start, emptyAt);
+    }
+    else
+    {
+        moveUp(start, emptyAt);
+    }
+}
+void solveEight(int start[], int goal[])
+{
+    g++;
+    // Move Tile
+    moveTile(start, goal);
+    Print(start);
+    // Get Heuristic Value
+    int f = heuristic(start, goal);
+    if (f == g)
+    {
+        cout << "Solved in " << f << " moves\n";
         return;
     }
-    cout << "Path: ";
-    for (const auto &p : path)
-    {
-        cout << "(" << p.first << "," << p.second << ") ";
-    }
-    cout << endl;
+    solveEight(start, goal);
 }
-
+bool solvable(int start[])
+{
+    int invrs = 0;
+    for (int i = 0; i < 9; i++)
+    {
+        // 1 2 3 -1 4 6 7 5 8
+        if (start[i] <= 1)
+            continue;
+        for (int j = i + 1; j < 9; j++)
+        {
+            if (start[j] == -1)
+                continue;
+            if (start[i] > start[j])
+                invrs++;
+        }
+    }
+    return invrs & 1 ? false : true;
+}
 int main()
 {
-    // create a grid with obstacles
-    vector<vector<int>> grid =
-        {
-            {0, 0, 0, 0, 0},
-            {0, 1, 1, 1, 0},
-            {0, 1, 0, 0, 0},
-            {0, 1, 1, 1, 0},
-            {0, 0, 0, 0, 0}};
-
-    int start_x = 0, start_y = 0;
-    int goal_x = 4, goal_y = 4;
-
-    // find the path using A* search
-    vector<pair<int, int>> path = a_star_search(grid, start_x, start_y, goal_x, goal_y);
-
-    // print the path
-    print_path(path);
-
+    int start[9];
+    int goal[9];
+    cout << "Enter the start state:(Enter -1 for empty):";
+    for (int i = 0; i < 9; i++)
+    {
+        cin >> start[i];
+    }
+    cout << "Enter the goal state:(Enter -1 for empty):";
+    for (int i = 0; i < 9; i++)
+    {
+        cin >> goal[i];
+    }
+    // verify if possible to solve
+    Print(start);
+    if (solvable(start))
+        solveEight(start, goal);
+    else
+        cout << "\nImpossible To Solve\n";
     return 0;
 }

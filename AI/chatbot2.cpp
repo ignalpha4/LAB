@@ -21,10 +21,9 @@ string generateResponse(string input)
         {"physics", "Physics is the study of matter, energy, and the interactions between them."},
         {"psychology", "Psychology is the scientific study of behavior and mental processes."},
     };
-
     for (auto it = keywords.begin(); it != keywords.end(); ++it)
     {
-        if (input.find(it->first) != input.size())
+        if (input.find(it->first) != string::npos)
         {
             return it->second;
         }
