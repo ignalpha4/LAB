@@ -13,7 +13,7 @@ string generateResponse(string input)
         {"programming", "Programming is the process of designing, writing, testing, and maintaining computer programs."},
         {"history", "History is the study of past events, particularly in human affairs."},
         {"art", "Art is the expression of human creativity and imagination, typically in a visual form such as painting, sculpture, or architecture."},
-        {"geography", "Geography is the study of the earth's physical features and the living creatures that inhabit it."},
+        {"geography", "Geography is the study of the earth's physical features and  the living creatures that inhabit it."},
         {"literature", "Literature is a form of written or spoken art that uses language to evoke emotion and convey ideas."},
         {"mathematics", "Mathematics is the study of numbers, quantities, and shapes."},
         {"music", "Music is an art form that uses sound and silence to create a composition that expresses emotion or tells a story."},
