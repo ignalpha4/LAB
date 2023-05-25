@@ -1,6 +1,23 @@
 #include <bits/stdc++.h>
-
 using namespace std;
+
+bool check_prime(long long n)
+{
+    if (n <= 1)
+    {
+        return false;
+    }
+
+    for (int i = 2; i < sqrt(n); i++)
+    {
+        if (n % i == 0)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 long long gcd(long long a, long long b)
 {
@@ -12,32 +29,15 @@ long long gcd(long long a, long long b)
         b = a % b;
         a = temp;
     }
+
     return a;
-}
-
-bool checkprime(long long n)
-{
-    if (n <= 1)
-    {
-        return false;
-    }
-
-    for (long long i = 2; i <= sqrt(n); i++)
-    {
-        if (n % i == 0)
-        {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 long long public_key(long long p, long long q)
 {
     long long fie = (p - 1) * (q - 1);
 
-    for (long long i = 2; i < fie; i++)
+    for (int i = 2; i < fie; i++)
     {
         long long e = i;
 
@@ -51,13 +51,14 @@ long long public_key(long long p, long long q)
 long long private_key(long long e, long long p, long long q)
 {
     long long d;
+
     long long fie = (p - 1) * (q - 1);
 
-    for (long long i = 1; i < INT16_MAX; i++)
+    for (int i = 1; i < INT16_MAX; i++)
     {
-
         d = i;
         long long temp = (e * d) % fie;
+
         if (temp == 1 && d < fie)
         {
             return d;
@@ -65,39 +66,29 @@ long long private_key(long long e, long long p, long long q)
     }
 }
 
-long long encryption(long long e, long long n, long long m)
+long long encrypt(long long e, long long m, long long n)
 {
-    /*
-    long long c;
-
-    long long power = pow(m, e);
-
-    c = power % n;
-
-    return c;*/
-
     return (long long)pow(m, e) % n;
 }
 
-long long decryption(long long d, long long n, long long c)
+long long decrypt(long long d, long long c, long long n)
 {
     return (long long)pow(c, d) % n;
 }
 
 int main()
 {
+    long long p, q, n, m, e;
 
-    long long p, q, n, e, m;
-
-    cout << "Enter values of p and q:" << endl;
+    cout << "enter value of p and q:" << endl;
     cin >> p >> q;
 
-    cout << "Enter message:" << endl;
+    cout << "enter msg :" << endl;
     cin >> m;
 
-    if (checkprime(p) == 0 || checkprime(q) == 0)
+    if (check_prime(p) == 0 || check_prime(q) == 0)
     {
-        cout << "Enter the prime numbers" << endl;
+        cout << "enter prime numbers:" << endl;
     }
 
     else
@@ -108,19 +99,17 @@ int main()
         cout << "public key is :" << public_key(p, q) << "," << n << endl
              << endl;
         cout << "e:" << e << endl;
+
         cout << "Private key is :" << private_key(e, p, q) << "," << n << endl
              << endl;
 
         long long d = private_key(e, p, q);
 
-        cout << "d :" << d << endl;
+        cout << "encrypted msg is" << encrypt(e, m, n) << endl;
+        long long c = encrypt(e, m, n);
 
-        cout << "Encrpyted msg is:" << encryption(e, n, m) << endl
-             << endl;
-
-        long long c = encryption(e, n, m);
-
-        cout << "plaintext  msg is:" << decryption(d, n, c) << endl;
+        cout << "decrypted msg is" << decrypt(d, c, n) << endl;
     }
+
     return 0;
 }

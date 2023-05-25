@@ -6,6 +6,7 @@ using namespace std;
     without considering the global or long-term effects of that choice.
      The algorithm simply aims to minimize the number of swaps needed to sort the array, without considering other factors such as the overall time complexity of the algorithm.
 */
+
 void selectionsort(int arr[], int n)
 {
     for (int i = 0; i < n - 1; i++)
@@ -21,14 +22,13 @@ void selectionsort(int arr[], int n)
         }
 
         swap(arr[min_index], arr[i]);
-
-        for (int i = 0; i < n; i++)
-        {
-            cout << arr[i] << " ";
-        }
-        cout << endl;
-        cout << "------------" << endl;
     }
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
 }
 
 int main()

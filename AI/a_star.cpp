@@ -172,3 +172,29 @@ int main()
         cout << "\nImpossible To Solve\n";
     return 0;
 }
+
+/*
+input:
+
+
+testcase1:
+
+1 2 3 -1 4 6 7 5 8
+1 2 3 4 5 6 7 8 -1
+
+
+testcase2:
+1 2 3 4 8 -1 7 6 5
+1 2 3 4 5 6 7 8 -1
+
+we can give any testcase
+its for 8 puzzle problem
+
+so give numbers in any order from1 to 7 and -1
+
+
+
+
+
+
+*/

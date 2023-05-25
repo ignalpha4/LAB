@@ -1,0 +1,122 @@
+
+<html>
+
+<head>
+    <title>Diffie-Hellman Key Exchange Algorithm</title>
+</head>
+
+<body>
+    <h1>Diffie-Hellman Key Exchange Algorithm</h1>
+    <form>
+        <label for="p">Enter the value of P:</label>
+        <input type="number" id="p" name="p" required><br><br>
+
+        <label for="g">Enter the value of G:</label>
+        <input type="number" id="g" name="g" required><br><br>
+
+        <label for="alice">Enter the private key for Alice:</label>
+        <input type="number" id="alice" name="alice" required><br><br>
+
+        <label for="bob">Enter the private key for Bob:</label>
+        <input type="number" id="bob" name="bob" required><br><br>
+
+        <input type="button" value="Calculate Secret Keys" onclick="calculateKeys()">
+    </form>
+
+    <p id="secretKey"></p>
+
+
+    <script>
+        // Function to check if a number is prime or not
+        function isPrime(n) {
+            // 1 is not a prime number
+            if (n == 1) {
+                return false;
+            }
+
+            // Loop to check for factors of n
+            for (var i = 2; i <= Math.sqrt(n); i++) {
+                if (n % i == 0) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function isPrimitiveRoot(g, p) {
+            // Check that g is a primitive root of p
+            var factors = [];
+            var phi = p - 1;
+
+            // Find the prime factors of phi
+            for (var i = 2; i <= Math.sqrt(phi); i++) {
+                if (phi % i == 0) {
+                    factors.push(i);
+                    while (phi % i == 0) {
+                        phi /= i;
+                    }
+                }
+            }
+
+            if (phi > 1) {
+                factors.push(phi);
+            }
+
+            // Check that g^((p-1)/q) != 1 (mod p) for all prime factors q of p-1
+            for (var i = 0; i < factors.length; i++) {
+                var q = factors[i];
+                var exp = (p - 1) / q;
+                var result = power(g, exp, p);
+                if (result == 1) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        function calculateKeys() {
+            // Get the values of P, G, a, and b from the form
+            var P = document.getElementById("p").value;
+            var G = document.getElementById("g").value;
+            var a = document.getElementById("alice").value;
+            var b = document.getElementById("bob").value;
+
+            // Validate that P is a prime number
+            if (!isPrime(P)) {
+                alert("P should be a prime number.");
+                return;
+            }
+
+            // Validate that G is a primitive root of P
+            if (!isPrimitiveRoot(G, P)) {
+                alert("G should be a primitive root of P.");
+                return;
+            }
+
+
+
+            // Calculate the secret keys
+            var x = power(G, a, P);  //public key of x
+            var y = power(G, b, P);  //public key of y
+            //----------------------
+            var xa = power(y, a, P);  //secrete key
+            var yb = power(x, b, P);  //secret key
+
+            // Display the secret keys
+            document.getElementById("secretKey").innerHTML = "Secret key for Alice: " + xa + "<br>" + "Secret key for Bob: " + yb;
+        }
+
+        // Power function to return value of a ^ b mod P
+        function power(first,second, prime) {
+
+            return ((Math.pow(first, second)) % prime);
+        }
+    </script>
+
+
+</body>
+
+</html>

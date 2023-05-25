@@ -1,56 +1,51 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-
-int andFunc(string s,int n)
+int andFunc(string s, int n)
 {
 
 	string tand[n];
 
-	for(int i=0;i<n;i++)
+	for (int i = 0; i < n; i++)
 	{
-		tand[i]=s[i]&127;
+		tand[i] = s[i] & 127;
 	}
-
-	for(int i=0;i<n;i++)
+	// print array
+	for (int i = 0; i < n; i++)
 	{
-		cout<<tand[i];
+		cout << tand[i];
 	}
-	cout<<endl;
+	cout << endl;
 
 	return 0;
 }
 
-
-int xorFunc(string s,int n)
+int xorFunc(string s, int n)
 {
 	string txor[n];
 
-	for(int i=0;i<n;i++)
+	for (int i = 0; i < n; i++)
 	{
-		txor[i]=s[i]^127;
+		txor[i] = s[i] ^ 127;
+	}
+	// print
+	for (int i = 0; i < n; i++)
+	{
+		cout << txor[i];
 	}
 
-	for(int i=0;i<n;i++)
-	{
-		cout<<txor[i];
-	}
-		
-	cout<<endl;
-		return 0;
+	cout << endl;
+	return 0;
 }
 
 int main()
 {
 	string s;
 	int n;
-	cout<<"Enter the string :";
-	cin>>s;
-	
-	n=s.size();
-	andFunc(s,n);
-	xorFunc(s,n);
-	
-	
-}
+	cout << "Enter the string :";
+	cin >> s;
 
+	n = s.size();
+	andFunc(s, n);
+	xorFunc(s, n);
+}

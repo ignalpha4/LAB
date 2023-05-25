@@ -3,9 +3,9 @@ using namespace std;
 
 const int N = 20;
 
-bool isSafe(int arr[][N], int x, int y, int n)
+bool is_safe(int arr[][N], int x, int y, int n)
 {
-    // to check the row
+
     for (int row = 0; row < x; row++)
     {
         if (arr[row][y] == 1)
@@ -14,10 +14,11 @@ bool isSafe(int arr[][N], int x, int y, int n)
         }
     }
 
-    // to check for diagonals
-    // left diagonal
+    // for left diagonal
+
     int row = x;
     int col = y;
+
     while (row >= 0 && col >= 0)
     {
         if (arr[row][col] == 1)
@@ -28,9 +29,9 @@ bool isSafe(int arr[][N], int x, int y, int n)
         col--;
     }
 
-    //right diagonal
     row = x;
     col = y;
+
     while (row >= 0 && col < n)
     {
         if (arr[row][col] == 1)
@@ -40,23 +41,24 @@ bool isSafe(int arr[][N], int x, int y, int n)
         row--;
         col++;
     }
-    return true; // if it's safe to place the queen
+
+    return true;
 }
 
-bool nQueen(int arr[][N], int x, int n)
+bool n_queens(int arr[][N], int x, int n)
 {
     if (x >= n)
     {
-        return true; // base condition when all queens are placed
+        return true; // base condition
     }
 
     for (int col = 0; col < n; col++)
     {
-        if (isSafe(arr, x, col, n))
+        if (is_safe(arr, x, col, n))
         {
             arr[x][col] = 1;
 
-            if (nQueen(arr, x + 1, n))
+            if (n_queens(arr, x + 1, n))
             {
                 return true;
             }
@@ -64,11 +66,13 @@ bool nQueen(int arr[][N], int x, int n)
             arr[x][col] = 0; // backtracking
         }
     }
+
     return false;
 }
 
 int main()
 {
+
     int n;
     cin >> n;
 
@@ -82,7 +86,7 @@ int main()
         }
     }
 
-    if (nQueen(arr, 0, n))
+    if (n_queens(arr, 0, n))
     {
         for (int i = 0; i < n; i++)
         {

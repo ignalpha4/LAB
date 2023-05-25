@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <title>diffie helman key exchange</title>
+</head>
+
+<body>
+    <form>
+        <label for="p">Enter value of P:</label>
+        <input type="number" id="p" name="p" required><br><br>
+
+        <label for="g">Enter value of G:</label>
+        <input type="number" id="g" name="g" required><br><br>
+
+        <label for="alice">Enter alice private key:</label>
+        <input type="number" id="alice" name="alice" required><br><br>
+
+
+        <label for="bob">Enter bob private key:</label>
+        <input type="number" id="bob" name="bob" required><br><br>
+
+        <input type="button" value="calculate secret key" onclick="calculateKeys()">
+
+    </form>
+    <p id="secretkey"></p>
+
+
+    <script>
+
+
+        function calculateKeys() {
+        var p=document.getElementById("p").value;
+        var g = document.getElementById("g").value;
+        var a= document.getElementById("alice").value;
+        var b = document.getElementById("bob").value;
+
+
+        //calculating public keys
+
+        var x=power(g,a,p);
+        var y=power(g,b,p);
+        
+        //calculating secret key
+
+        var xa=power(y,a,p);
+        var yb=power(x,b,p);
+
+        document.getElementById("secretkey").innerHTML="secret key for alice is:"+xa+"<br>"+"secret key for bob is:"+yb;
+        }
+
+        function power(first,second,prime)
+        {
+            return ((Math.pow(first,second))%prime);
+        }
+
+
+    </script>
+
+</body>
+
+
+</html>

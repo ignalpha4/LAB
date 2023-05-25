@@ -15,7 +15,7 @@ bool isSafe(int arr[], int x, int y, int n)
     return true; // if it's safe to place the queen
 }
 
-void nQueen(int arr[], int x, int n, int &count)
+void nQueenBB(int arr[], int x, int n, int &count, bool cols[], bool diag1[], bool diag2[])
 {
     if (x >= n)
     {
@@ -45,13 +45,28 @@ void nQueen(int arr[], int x, int n, int &count)
 
     for (int col = 0; col < n; col++)
     {
-        if (isSafe(arr, x, col, n))
+        if (!cols[col] && !diag1[x + col] && !diag2[x - col + n - 1])
         {
             arr[x] = col;
+            cols[col] = diag1[x + col] = diag2[x - col + n - 1] = true;
 
-            nQueen(arr, x + 1, n, count);
+            nQueenBB(arr, x + 1, n, count, cols, diag1, diag2);
+
+            cols[col] = diag1[x + col] = diag2[x - col + n - 1] = false;
         }
     }
+}
+
+void nQueenBranchBound(int n)
+{
+    int arr[n];
+    bool cols[n] = {false};          // to mark if a column is occupied
+    bool diag1[2 * n - 1] = {false}; // to mark if a diagonal (from top-left to bottom-right) is occupied
+    bool diag2[2 * n - 1] = {false}; // to mark if a diagonal (from top-right to bottom-left) is occupied
+
+    int count = 0; // to count the number of solutions
+
+    nQueenBB(arr, 0, n, count, cols, diag1, diag2);
 }
 
 int main()
@@ -59,11 +74,7 @@ int main()
     int n;
     cin >> n;
 
-    int arr[n];
-
-    int count = 0; // to count the number of solutions
-
-    nQueen(arr, 0, n, count);
+    nQueenBranchBound(n);
 
     return 0;
 }

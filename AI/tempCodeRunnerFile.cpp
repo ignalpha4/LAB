@@ -1,3 +1,4 @@
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -8,19 +9,17 @@ public:
 	node *left, *right;
 };
 
-//-----------------------------------------------
 node *newNode(int data)
 {
 	node *Node = new node();
-
 	Node->data = data;
 	Node->left = NULL;
 	Node->right = NULL;
 
 	return (Node);
 }
-
 //-----------------bfs-----------------------------
+
 
 void bfs(node *root)
 {
@@ -62,7 +61,6 @@ void dfs(node *node) // Inorder
 int main()
 {
 	node *root = newNode(20);
-
 	root->left = newNode(8);
 	root->right = newNode(22);
 	root->left->left = newNode(4);
